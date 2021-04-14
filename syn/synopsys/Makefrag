@@ -1,0 +1,35 @@
+#=======================================================================
+# This makefile will use Synopsys Design Compiler to synthesize
+# your RTL into a gate-level verilog netlist.
+# This makefile will use Synopsys Formality to verify
+# generated gate-level verilog netlist against your RTL implementation.
+#
+#=======================================================================
+
+
+TECHNOLOGY_PATH	 				= /home/chenzou/.Synopsys
+STD_CELL_NAME 					= SAED32_EDK
+
+verilog_cells						= $(TECHNOLOGY_HOME)/$(STD_CELL_NAME)/lib/stdcell_hvt/verilog/saed32nm_hvt.v \
+					          			$(TECHNOLOGY_HOME)/$(STD_CELL_NAME)/lib/stdcell_lvt/verilog/saed32nm_lvt.v \
+													$(TECHNOLOGY_HOME)/$(STD_CELL_NAME)/lib/stdcell_rvt/verilog/saed32nm.v
+
+
+#================================================
+clock_period 						= 1.00
+
+#================================================
+# DC-Synthesis clock
+#	dc_clock_period_bc (best case)     	is 10% smaller than clock_period
+#	dc_clock_period_wc (worst case)   	is 10% higher  than clock_period
+#	dc_clock_period_tc (typical case) 	is equal to         clock_period
+
+dc_clock_period_bc			= 0$(shell echo "scale=4; ${clock_period}*0.9" | bc)
+dc_clock_period_wc			= 0$(shell echo "scale=4; ${clock_period}*1.1" | bc) 
+dc_clock_period_tc			= $(clock_period)
+
+dc_clock_period 				= $(clock_period)
+
+#================================================
+# PrimeTime clock
+vcs_clock_period 				= 0$(shell echo "scale=4; ${clock_period}*0.5" | bc)

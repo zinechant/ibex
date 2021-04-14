@@ -1,0 +1,1 @@
+../../rtl/prim_clock_gating.v
